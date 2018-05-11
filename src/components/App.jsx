@@ -2,8 +2,16 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      currentVideo: window.exampleVideoData[0],
-      videos: window.exampleVideoData
+      currentVideo: {
+        id: {
+          videoId: ''
+        },
+        snippet: { 
+          title: '',
+          description: ''
+        }
+      },
+      videos: []
     };
   }
   
@@ -18,8 +26,28 @@ class App extends React.Component {
   //     }
   //   );
   // }
-  handleSearch() {
-    
+  componentDidMount() {
+    this.props.searchYouTube({key: window.YOUTUBE_API_KEY, query: 'cats'}, this.setSearchState.bind(this));
+  }
+  
+  
+  
+  setSearchState(videos) {
+    this.setState({
+      currentVideo: videos[0],
+      videos: videos
+    });
+  }
+  
+  handleSearch(event) {
+    this.props.searchYouTube(
+      {
+        key: window.YOUTUBE_API_KEY,
+        query: event.target.value,
+        max: 25
+      },
+      _.debounce(this.setSearchState.bind(this), 500)
+    );
   }
   
   handleClick(video) {
@@ -33,7 +61,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search />
+            <Search search={ this.handleSearch.bind(this) } />
           </div>
         </nav>
         <div className="row">
