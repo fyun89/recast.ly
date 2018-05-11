@@ -18,6 +18,9 @@ class App extends React.Component {
   //     }
   //   );
   // }
+  handleSearch() {
+    
+  }
   
   handleClick(video) {
     this.setState({//ALWAYS USE setState TO CHANGE STATE - this lets React to recognize change
